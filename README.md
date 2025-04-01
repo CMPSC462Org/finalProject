@@ -27,6 +27,8 @@ cd ..
 docker-compose up --build
 ```
 
+* This should create the environment for the Frontend and backend
+
 ## Run the Backend
 
 **1.** Move to the "Backend" folder
@@ -35,10 +37,34 @@ docker-compose up --build
 cd backend
 ```
 
-**2.** Run the python Environment in the terminal
+**2.** Set up the python Environment and Interpretor
 
+2a. Activate the Virtual Environment (If Docker didn't do it already)
+
+**Windows**
 ```
 env\Scripts\activate
+```
+
+**MacOS***
+```
+source venv/bin/activate
+```
+2b. Select Interpretor
+
+* CRTL+shift+p (Opens Intepretor)
+
+* Select **python selcet interpretor**
+
+* Choose 
+```
+./backend/venv/Scripts/python.exe
+```
+
+* If its not listed, click **Enter Interpretor Path**, then browsw manually to the correct location:
+
+```
+C:\Users\<<USERNAME>>\path\to\finalProject\backend\venv\Scripts\python.exe
 ```
 
 
@@ -72,6 +98,6 @@ yarn dev
 
 ## More to come soon! 🥳
 
-* [ ] PostgreSQL
-* [ ] Finish the Backend
+* [ ] AWS
+* [ ] Finsh the Backend
 * [ ] Working on Login/ Register pages
