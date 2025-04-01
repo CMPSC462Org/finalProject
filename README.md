@@ -1,7 +1,7 @@
 # Job Search Tracker Final Project (CMPSC 462) 📂
 
 
-This is a full-stack job search tracker buillt with **React (Vite)** for the frontend, **Flask** for the backend, and **Docker** for containerzing.
+This is a full-stack job search tracker built with **React (Vite)** for the front end, **Flask** for the back end, and **Docker** for containerizing.
 
 ## Getting Started 
 
@@ -66,5 +66,5 @@ yarn dev
 ## More to come soon! 🥳
 
 * [ ] PostgreSQL
-* [ ] Finsh the Backend
+* [ ] Finish the Backend
 * [ ] Working on Login/ Register pages
