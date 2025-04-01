@@ -1,7 +1,7 @@
 # Job Search Tracker Final Project (CMPSC 462) 📂
 
 
-This is a full-stack job search tracker built with **React (Vite)** for the front end, **Flask** for the back end, and **Docker** for containerizing.
+This is a full-stack job search tracker built with **React (Vite)** for the frontend, **Flask** for the backend, and **Docker** for containerizing.
 
 ## Getting Started 
 
@@ -35,7 +35,14 @@ docker-compose up --build
 cd backend
 ```
 
-**2.** Run the Flask Server
+**2.** Run the python Environment in the terminal
+
+```
+env\Scripts\activate
+```
+
+
+**3.** Run the Flask Server
 ```
 python run.py
 ```
