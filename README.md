@@ -99,5 +99,5 @@ yarn dev
 ## More to come soon! 🥳
 
 * [ ] AWS
-* [ ] Finsh the Backend
+* [ ] Finish the Backend
 * [ ] Working on Login/ Register pages
