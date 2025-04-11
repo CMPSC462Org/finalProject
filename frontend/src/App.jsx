@@ -1,10 +1,8 @@
-
+import Register from './pages/Register'
 function App() {
   
   return (
-    <div>
-      <h1>Job Tracker App</h1>
-    </div>
+    <Register/>
   )
 }
 

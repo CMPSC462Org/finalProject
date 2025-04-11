@@ -15,11 +15,13 @@ def create_app():
     bcrypt.init_app(app)
     CORS(app)
 
-
-
     @app.route("/", methods=["GET"])
     def index():
         return  { "message": "Welcome to the flask Server!"}
+    
+    
+    
+    
 
     return app
 
