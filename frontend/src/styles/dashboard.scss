@@ -1,5 +1,4 @@
 // Dashboard styles
-
 body {
     background-color: #F5F9FF;
     margin: 0;
@@ -11,7 +10,168 @@ body {
     padding: 0;
   }
 
+  body, html {
+    overflow: hidden;  
+  }
+
   input, label, button, p, span,h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', sans-serif;
     font-weight: 400;
   }
+
+
+
+// Main Contianers layouts
+.Main-Dashboard-Container {
+    display:flex;
+    flex-direction:row;
+    height: 100vh;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #F5F9FF;
+    margin:0;
+}
+
+.Dashboard-Container-Collumn {
+    display:flex;
+    flex-direction:column;
+    flex-grow: 1;
+    background-color: #F5F9FF;
+    margin:0;
+}
+
+.Job-List-Container {
+    display:flex;
+    flex-direction:row;
+    gap:10px;
+    flex-wrap: wrap;
+}
+
+
+
+// Sidebar styles
+
+.Main-Sidebar-Contianer {
+    display:flex;
+    flex-direction:column;
+    // justify-content: space-between; // <- This Line
+    width: 300px;
+    height: 100vh;
+    background-color: #6B80F5;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.Sidebar-Top-Content-Container {
+    flex: 1; 
+  }
+
+  .Sidebar-Bottom-Content-Container {
+    flex:0.15;
+  }
+
+
+.Main-Sidebar-Title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    color: #FFFFFF;
+    margin-bottom: 50px;
+}
+
+.Sidebar-Button-Container {
+    display:flex;
+    flex-direction:row;
+    gap:10px;
+    margin-bottom:15px;
+    width: 270px;
+
+    .Main-Sidebar-Button {
+        display:flex;
+        flex-direction:row;
+        justify-content:start;
+        width:100%;
+        gap: 10px;;
+        padding:15px;
+        font-size: 14px;
+        font-family: 'Inter', sans-serif;
+        border-radius: 8px;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;     
+        color: black;              
+        background-color: #f1f1f1; 
+
+        &:hover {
+            background-color: #e6e6fa; // soft hover
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transform: translateX(2px);
+          }
+
+        &:active {
+            background-color: #d0d0e6; // active
+            color: #6B80F5;
+            font-weight: 600;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+          }
+          &.active {
+            background-color: #ffffff;
+            color: #6B80F5;
+            font-weight: 600;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); // pressed-in look
+          }
+          
+    }
+}
+
+
+
+.Divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 20px;
+    border: none;
+  }
+
+
+  .User-Info-Row {
+    display:flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-left: 5px;
+  }
+
+
+
+  .User-Info-Text-Collumn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    
+  }
+
+  .User-Image {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1)
+  }
+
+  .User-Name {
+    font-weight: 500;
+    color: white;
+  }
+  
+  .User-Email {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+
+
+
+
+
+
+
