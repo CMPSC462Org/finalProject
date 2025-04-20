@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import '../styles/main.scss';
 import '../styles/dashBoard.scss';
 import JobCard from '../components/JobCard';
@@ -7,16 +8,20 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 
 
+
 const DashBoard = () => {
+
   return (
     <div className="Main-Dashboard-Container">
-      <Sidebar />
+      <Sidebar 
+      />
       <div className="Dashboard-Container-Collumn">
           <Navbar />
+          
           <div className="Job-List-Container">
-            <JobList />
-            <JobList />
+            
           </div>
+          <Outlet />
       </div>      
     </div>
   )
