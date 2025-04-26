@@ -7,6 +7,7 @@ import JobForm from '../components/JobForm';
 import JobCard from '../components/JobCard';
 import JobColumn from '../components/JobColumn';
 import JobList from '../components/JobList';
+import Profile from '../components/Profile';
 
 
 // Will add more routes later
@@ -25,8 +26,8 @@ const AppRoutes = () => {
         <Route index element={<JobList />} />
 
         <Route path="add-job" element={<JobForm />} />
-        <Route path="profile" element={<JobForm />} />
-        <Route path="settings" element={<JobForm />} />
+        <Route path="profile" element={<Profile />} />
+        
       </Route>
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />

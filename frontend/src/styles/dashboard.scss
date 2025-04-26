@@ -20,6 +20,19 @@ body {
   }
 
 
+  // Animations 
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
 
 // Main Contianers layouts
 .Main-Dashboard-Container {
@@ -267,6 +280,7 @@ body {
   min-height: 100vh;
   padding: 40px;
   font-family: 'Inter', sans-serif;
+  animation: fadeInUp 0.4s ease-in-out;
 }
 
 .Main-Job-Form {
@@ -281,7 +295,7 @@ body {
   width: 100%;
   max-width: 600px;
 
-
+    
 
 }
 
@@ -410,6 +424,7 @@ body {
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease;
+  animation: fadeInUp 0.4s ease-in-out;
 
   &:hover {
       transform: translateY(-3px);

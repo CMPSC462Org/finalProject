@@ -6,7 +6,8 @@ import PlaceholderImage from '../assets/corporate-man-placeholder-image.jpg'
 //Icons
 import { FaThLarge, FaLayerGroup, FaRegIdCard, FaSlidersH } from 'react-icons/fa';
 
-const Sidebar = () => {
+const Sidebar = ({ userData }) => {
+
    
   return (
     <div className="Main-Sidebar-Contianer">
@@ -60,15 +61,6 @@ const Sidebar = () => {
                 </NavLink>
             </div>
 
-            <div className="Sidebar-Button-Container">
-                <NavLink 
-                    to="/dashboard/settings" 
-                    className={({ isActive }) => `Main-Sidebar-Button ${isActive ? 'active' : ''}`}
-                    >
-                    <FaSlidersH className="Sidebar-Icon" />
-                    Settings
-                </NavLink>
-            </div>
 
         </div>
         
@@ -77,16 +69,16 @@ const Sidebar = () => {
             <div className="Divider"/>
 
             <div className="User-Info-Row">
+                {/*Keep place holder image for now*/}
                 <img className="User-Image" src={PlaceholderImage} alt="User" />
                 
                 <div className="User-Info-Text-Collumn">
-                    <span className="User-Name">John Doe</span>
-                    <span className="User-Email">JohnDoe@gmail.com</span>
+                    <span className="User-Name">{userData.username}</span>
+                    <span className="User-Email">{userData.email}</span>
 
                 </div>
             </div> 
         </div>
-        
     </div>
   )
 }

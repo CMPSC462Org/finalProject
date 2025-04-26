@@ -1,0 +1,107 @@
+body {
+    background-color: #F5F9FF;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    margin: 0;
+    padding: 0;
+  }
+
+  body, html {
+    overflow: hidden;  
+  }
+
+  input, label, button, p, span,h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+  }
+  // Animations 
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
+
+  .Main-Profile-Container {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100%;
+    padding: 40px;
+    font-family: 'Inter', sans-serif;
+    animation: fadeInUp 0.5s ease-in-out;
+  }
+
+
+.Profile-Card-Container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #FFFFFF;
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 600px;
+
+  span {
+    font-size: 20px;
+    font-weight: bold;
+    color: #6F6F6F;
+  }
+}
+
+.Profile-Card-Image-and-Info-Row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+
+    img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .Profile-Info-Container-collumn {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        
+        span{
+
+            font-size: 25px;
+            font-weight: bold;
+            color: #6F6F6F;
+        }
+    }
+}
+
+
+
+.Profile-Log-Out-Button {
+    width: 100%;
+    max-width: 600px;
+    font-size: 18px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #515DEF;
+    color:#F3F3F3;
+    cursor: pointer;
+    stroke: none;
+
+    &:hover {
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+}
