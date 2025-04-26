@@ -5,6 +5,8 @@ import JobEditModal from './JobEditModal';
 import { FaBriefcase, FaCalendarAlt, FaBuilding, FaTrashAlt } from 'react-icons/fa';
 
 const JobCard = ({ job, onDelete, onEdit }) => {
+  
+  
   return (
     <div 
     className="main-JobCard-Container"
@@ -15,7 +17,8 @@ const JobCard = ({ job, onDelete, onEdit }) => {
 
 
         <button className="JobCard-Delete-Button"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent the click event from bubbling up to the card
               if (window.confirm("Are you sure you want to delete this job Entry?")) {
                 // Call the onDelete function passed from the parent component
               onDelete(job.id)

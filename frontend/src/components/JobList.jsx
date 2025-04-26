@@ -64,7 +64,7 @@ const JobList = () => {
 
     {selectedJob && 
     <JobEditModal 
-    jobToEdit={selectedJob} 
+    JobToEdit={selectedJob} 
     onClose={() => setSelectedJob(null)} />}
 
 

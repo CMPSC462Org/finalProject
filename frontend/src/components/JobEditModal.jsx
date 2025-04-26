@@ -26,6 +26,8 @@ const JobEditModal = ({ JobToEdit, onClose }) => {
               }
             
         }, [JobToEdit]);
+
+        
     
 
   return (
@@ -33,8 +35,8 @@ const JobEditModal = ({ JobToEdit, onClose }) => {
     <div className="modal-background">
         <div className="modal-content">
 
-                // Reusing the same styles as the job form
-                <div className="Job-Form-Container">
+                
+                
                     <form className="Main-Job-Form">
                         <h2 className="Job-Form-Title">Edit Job</h2>
                 
@@ -96,7 +98,7 @@ const JobEditModal = ({ JobToEdit, onClose }) => {
                 
                 
                         <div className="Job-Form-Button-Row">
-                        <button className="Job-Form-Button" type="submit" onClick={onClose} >Close</button>
+                        <button className="Job-Form-Button" type="button" onClick={onClose} >Close</button>
                         <button className="Job-Form-Button" type="submit">Submit</button>
                         </div>
                         
@@ -104,7 +106,7 @@ const JobEditModal = ({ JobToEdit, onClose }) => {
                     </form>
                 
                 
-            </div>
+            
         </div>
     </div>
     // Modal for editing an existing job entry, will use the same styles as the job form
