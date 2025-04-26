@@ -1,11 +1,16 @@
 import React from 'react'
 import '../styles/main.scss';
 import '../styles/dashBoard.scss';
+import JobEditModal from './JobEditModal';
 import { FaBriefcase, FaCalendarAlt, FaBuilding, FaTrashAlt } from 'react-icons/fa';
 
-const JobCard = ({ job, onDelete }) => {
+const JobCard = ({ job, onDelete, onEdit }) => {
   return (
-    <div className="main-JobCard-Container">
+    <div 
+    className="main-JobCard-Container"
+    onClick={ () => onEdit(job) } // Call the onEdit function passed from the parent component when the card is clicked
+
+    >
       <div className="JobCard-Header">
 
 
@@ -15,7 +20,6 @@ const JobCard = ({ job, onDelete }) => {
                 // Call the onDelete function passed from the parent component
               onDelete(job.id)
               }
-
             }
             }>
               <FaTrashAlt className="JobCard-Delete-Icon" />
@@ -37,7 +41,6 @@ const JobCard = ({ job, onDelete }) => {
       </p>
       
       <div className="JobCard-Divider"/>
-
       {job.notes && <p className="JobCard-Notes">"{job.notes}"</p>}
       </div>
   )
