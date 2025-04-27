@@ -79,7 +79,7 @@ def get_jobs(current_user):
         for job in list_of_jobs:
             job_list.append(
                     {
-                    "_id": job.id,
+                    "_id": str(job.id),
                     "title": job.title,
                     "company_name": job.company_name,
                     "status": job.status,
