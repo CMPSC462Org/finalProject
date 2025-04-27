@@ -42,7 +42,7 @@ def generate_token_and_set_cookie(user_id, res_data):
             "token",
             token,
             httponly=True,
-            secure=True,  
+            secure=(os.getenv("FLASK_ENV") != "development"),  
             samesite="Strict",  
             max_age= 30 * 24 *60 * 60  # 30 days in seconds
         )

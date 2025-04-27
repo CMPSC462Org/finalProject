@@ -5,9 +5,6 @@ from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 
 
-import os
-import pymongo
-from pymongo import MongoClient
 import mongoengine
 from mongoengine import Document, StringField, EmailField, DateTimeField
 from datetime import datetime, timezone

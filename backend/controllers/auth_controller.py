@@ -56,14 +56,17 @@ def sign_up():
         
         hashed_pw = bcrypt.generate_password_hash(password).decode("utf-8")
 
-        new_user = User.objects.create(
-            first_name=first_name,
-            last_name=last_name,
-            username=username,
-            email=email,
-            password=hashed_pw,
-            profile_picture=profile_picture,
-        )
+        try:
+            new_user = User.objects.create(
+                first_name=first_name,
+                last_name=last_name,
+                username=username,
+                email=email,
+                password=hashed_pw,
+                profile_picture=profile_picture,
+            )
+        except NotUniqueError as nu:
+            return jsonify({"error": "Username or email already exists"}), 400
 
         if new_user:
             res_data = {
@@ -92,17 +95,76 @@ def sign_up():
     except ValidationError as ve:
         return jsonify({"error": f"Validation Error: {str(ve.message)}"}), 400
     except Exception as e:
+        print(f"error in Signup controller: {str(e)}")
         return jsonify({"error": f"Error in signup controller: {str(e)}"}), 500
     
 
 def login():
-    pass
+    try:
+        if request.is_json:
+            data = request.get_json()
+        else:
+            data = request.form
+
+        username = data.get("username")
+        password = data.get("password")
+
+        found_user = User.objects(username=username).first()
+
+        if not found_user:
+            return jsonify({"error": "User not found"}), 404
+        
+        if not bcrypt.check_password_hash(found_user.password, password):
+            return jsonify({"error": "Invalid password"}), 400
+        
+        res_data = {
+            "message": "Login successful",
+            "user": {
+                "_id": str(found_user.id),
+                "first_name": found_user.first_name,
+                "last_name": found_user.last_name,
+                "username": found_user.username,
+                "email": found_user.email,
+                "profile_picture": found_user.profile_picture,
+            }
+        }
+
+        return generate_token_and_set_cookie(found_user.id, res_data)
+
+
+
+
+        # Validates if the user if found
+        
+    
+    except Exception as e:
+        print(f"error in Login controller: {str(e)}")
+        return jsonify({"error": f"Error in login controller: {str(e)}"}), 500
 
 def logout():
-    pass
+    try:
+        response = make_response(jsonify({"message": "Logout successful"}), 200)
+        response.set_cookie("token", "", max_age=0)
+        return response
 
-def protected_route():
-    pass
+    except Exception as e:
+        print(f"error in Logout controller: {str(e)}")
+        return jsonify({"error": f"Error in logout controller: {str(e)}"}), 500
+
+def getMe(current_user):
+    try:
+        user_data = {
+            "_id": str(current_user.id),
+            "first_name": current_user.first_name,
+            "last_name": current_user.last_name,
+            "username": current_user.username,
+            "email": current_user.email,
+            "profile_picture": current_user.profile_picture,
+        }
+        return jsonify({"user": user_data}), 200
+    except Exception as e:
+        print(f"Error in the Get me controller: {str(e)}")
+        return jsonify({"Error": f"Error in get me controller: {str(e)}"}), 500
 
 
 
