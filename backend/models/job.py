@@ -10,16 +10,17 @@ import os
 import pymongo
 from pymongo import MongoClient
 import mongoengine
-from mongoengine import Document, StringField, EmailField, DateTimeField ,ReferenceField
+from mongoengine import Document, StringField, EmailField, DateTimeField ,ReferenceField,ListField
 from datetime import datetime, timezone
 
 
 class Job(Document):
     title = StringField(required=True)
     company_name = StringField(required=True)
-    status = StringField(required=True, choices=["applied", "interview", "offered", "rejected"])
-    location = StringField(required=True)  
-    date_applied = DateTimeField(default=lambda: datetime.now(timezone.utc))
+    status = StringField(required=True, choices=["applied", "interview", "offered", "rejected"]) 
+    application_date = DateTimeField(default=lambda: datetime.now(timezone.utc))
+    comments = ListField(StringField())
+    link = StringField(required=False)
     user_id = ReferenceField(User, required=True)  # Reference to the User ID
 
     # Time Stamps
