@@ -1,13 +1,45 @@
 import {React, useEffect, useState} from 'react'
 import axios from 'axios';
+import api from '../services/api';
+import { loginUser } from '../services/auth';
 import '../styles/main.scss';
+import Register from './Register';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
 
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+   const handleLogin = async (e) => {
+      e.preventDefault();
+      
+      try {
+          const data =  await loginUser({email, password});
+          if (!data) {
+            console.log("Failed to Login User:", data)
+          } else {
+            console.log("Login successful", data)
+          }
+
+          localStorage.setItem('user', JSON.stringify(data.user));
+          
+
+          // Redirect the user to the dashboard
+          navigate('/dashboard');
+
+
+      } catch(error) {
+        console.log('Login failed:', error)
+      }
+    
+   }
+
+
+    
+    
   
     return (
       <div className="Main-container-Register">
@@ -27,7 +59,11 @@ const Login = () => {
         <div className="Register-Form-Container">
   
           <h1 className="Register-Form-Title"><span className="Register-Form-Title-Span">JobFlow</span></h1>
-          <form className="Register-Form">
+          <form 
+          
+          className="Register-Form"
+          onSubmit={handleLogin}
+          >
   
           
           <div className="Form-Sign-Up-Title-Container">
@@ -44,8 +80,8 @@ const Login = () => {
                 placeholder=" " 
                 required
                 className="Register-Form-Input" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)}/>
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)}/>
                 <label htmlFor="loginEmail">Email</label>
               </div>
               
@@ -53,8 +89,8 @@ const Login = () => {
                 <input type="password" 
                   placeholder=" " 
                   className="Register-Form-Input" 
-                  value={confirmPassword} 
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)}
                   />
                   <label htmlFor="loginPassword">Password</label>
               </div>
@@ -62,7 +98,7 @@ const Login = () => {
             </div>
   
             <button className="Register-Form-Button" type='submit'>Login to your account</button>
-            <span className="Register-Form-Text">Don't have an account? <a href="/login" className="Register-Form-Link">Register here</a></span>
+            <span className="Register-Form-Text">Don't have an account? <Link to="/register" className="Register-Form-Link">Register here</Link></span>
             
 
             <div className="Forgot-Password-and-Remember-Password-Container">

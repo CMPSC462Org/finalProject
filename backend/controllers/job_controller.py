@@ -109,9 +109,9 @@ def get_job_by_id(current_user, job_id):
             
             "_id":str(selected_job.id),
             "title": selected_job.title,
-            "company": selected_job.company_name,
+            "company_name": selected_job.company_name,
             "status": selected_job.status,
-            "application_date":selected_job.application_date,
+            "application_date":selected_job.application_date.strftime("%Y-%m-%d"),
             "comments": selected_job.comments,
             "link": selected_job.link
             

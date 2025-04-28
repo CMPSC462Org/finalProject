@@ -115,6 +115,36 @@ body {
 }
 
 
+.profile-pricture-upload-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    max-width: 500px;
+    width:100%;
+
+
+    span {
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 17px;
+    }
+    .upload-icon{
+        width: 30px;
+        height: 30px;
+        color: #888;
+        cursor: pointer;
+    }
+
+    .file-selected {
+        color: #6B80F5;
+    }
+
+    
+}
+
+
 .Register-Form-Button {
     width: 100%;
     max-width: 495px;

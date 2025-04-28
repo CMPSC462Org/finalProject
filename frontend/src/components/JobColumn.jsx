@@ -7,7 +7,7 @@ import { FaMinus } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 
 
-const JobColumn = ({ status, jobs, onEdit }) => {
+const JobColumn = ({ status, jobs, onEdit, onDelete }) => {
 
   
 
@@ -35,10 +35,11 @@ const JobColumn = ({ status, jobs, onEdit }) => {
       <div className="Job-Card-Scraollable-Container">
 
        {jobs.map((job) => (
-          <JobCard key={job.id}
+          <JobCard key={job._id}
            job={job} 
-           onDelete={() => {}} 
+           onDelete={onDelete} 
            onEdit={onEdit}
+          
            
            />
         ))}

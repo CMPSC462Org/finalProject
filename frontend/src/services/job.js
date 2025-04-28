@@ -2,13 +2,13 @@ import api from "./api";
 
 
 export const createJob = async (jobData) => {
-    const response = await api.post('/jobs/createjob',jobData);
+    const response = await api.post('/job/createjob',jobData);
     return response.data;
 };
 
 
 export const getJobs = async () => {
-    const repsonse = await api.get('/jobs/getjobs');
+    const repsonse = await api.get('/job/getjobs');
     return repsonse.data;
 };
 

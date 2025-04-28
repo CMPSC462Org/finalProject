@@ -21,7 +21,7 @@ const JobCard = ({ job, onDelete, onEdit }) => {
               e.stopPropagation(); // Prevent the click event from bubbling up to the card
               if (window.confirm("Are you sure you want to delete this job Entry?")) {
                 // Call the onDelete function passed from the parent component
-              onDelete(job.id)
+              onDelete(job._id)
               }
             }
             }>
@@ -38,13 +38,13 @@ const JobCard = ({ job, onDelete, onEdit }) => {
           
       </div>
 
-      <p className="jobCard-Company">{job.company} <FaBuilding /></p>
+      <p className="jobCard-Company">{job.company_name} <FaBuilding /></p>
       <p className="JobCard-Date">
-         Applied on: {job.date}  <FaCalendarAlt />
+         Applied on: {new Date(job.application_date).toLocaleDateString()}  <FaCalendarAlt />
       </p>
       
       <div className="JobCard-Divider"/>
-      {job.notes && <p className="JobCard-Notes">"{job.notes}"</p>}
+      {job.comments && <p className="JobCard-Notes">"{job.comments[0]}"</p>}
       </div>
   )
 }

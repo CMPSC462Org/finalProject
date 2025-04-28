@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import '../styles/main.scss';
 import '../styles/dashBoard.scss';
 import '../styles/jobcollumstyles.scss';
+import { updateJob } from '../services/job';
+import { getJobById } from '../services/job';
 
 import { FiChevronDown } from 'react-icons/fi';
 
-const JobEditModal = ({ JobToEdit, onClose }) => {
+const JobEditModal = ({ JobToEdit, onClose, onUpdate }) => {
 
     const [title, setTitle] = useState('');
     const [company, setCompany] = useState('');
@@ -14,18 +16,45 @@ const JobEditModal = ({ JobToEdit, onClose }) => {
     const [notes, setNotes] = useState('');
 
 
+    const fetchJobDetails = async () => {
+        try {
+                const response = await getJobById(JobToEdit._id);
+                setTitle(response.job.title);
+                setCompany(response.job.company_name);
+                setStatus(response.job.status);
+                setDate(response.job.application_date.slice(0, 10));
+                setNotes(response.job.comments && response.job.comments.length > 0 ? response.job.comments[0] : '');
+        } catch (error) {
+            console.error("Error fetching job data: ", error)
+        }
+    }
     
 
         useEffect(() => {
-            if (JobToEdit) {
-                setTitle(JobToEdit.title);
-                setCompany(JobToEdit.company);
-                setStatus(JobToEdit.status);
-                setDate(JobToEdit.date);
-                setNotes(JobToEdit.notes);
+            if (JobToEdit && JobToEdit._id) {
+                fetchJobDetails();
               }
-            
         }, [JobToEdit]);
+
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+
+            try {
+                const updatedData = {
+                    title,
+                    company_name: company,
+                    status,
+                    application_date: date,
+                    comments: [notes]
+                };
+
+                await updateJob(JobToEdit._id, updatedData)
+                await onUpdate();
+                onClose();
+            } catch (error) {
+                console.error("Error updating job: ", error)
+            }
+        }
 
         
     
@@ -37,7 +66,7 @@ const JobEditModal = ({ JobToEdit, onClose }) => {
 
                 
                 
-                    <form className="Main-Job-Form">
+                    <form className="Main-Job-Form" onSubmit={handleSubmit}>
                         <h2 className="Job-Form-Title">Edit Job</h2>
                 
                         
@@ -66,7 +95,7 @@ const JobEditModal = ({ JobToEdit, onClose }) => {
                             onChange={(e) => setStatus(e.target.value)}
                     
                             >
-                            <option value="" disabled selected hidden>Select status</option>
+                            <option value="" disabled hidden>Select status</option>
                             <option value="applied">Applied</option>
                             <option value="interviewed">Interviwed</option>
                             <option value="offered">Offered</option>

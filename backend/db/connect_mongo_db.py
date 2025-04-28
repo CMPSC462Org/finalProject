@@ -8,12 +8,18 @@ import os
 from pymongo import MongoClient
 
 
+load_dotenv()
+
 def connect_mongodb():
     try:
         mongo_uri = os.getenv("MONGODB_URL")
         db = connect(
             host=mongo_uri,
-            alias="default"
+            alias="default",
+            tls=True,    
+            tlsAllowInvalidCertificates=True,
+            
+        
         )
         print("Connected to MongoDB (via mongoengine)")
         print(f"Database Name: {db.name}")

@@ -5,6 +5,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import PlaceholderImage from '../assets/corporate-man-placeholder-image.jpg'
 //Icons
 import { FaThLarge, FaLayerGroup, FaRegIdCard, FaSlidersH } from 'react-icons/fa';
+import defaultUserIMG from '../assets/user_pro.png';
 
 const Sidebar = ({ userData }) => {
 
@@ -69,11 +70,11 @@ const Sidebar = ({ userData }) => {
             <div className="Divider"/>
 
             <div className="User-Info-Row">
-                {/*Keep place holder image for now*/}
-                <img className="User-Image" src={PlaceholderImage} alt="User" />
+               
+                <img className="User-Image" src={userData.profile_picture || defaultUserIMG} alt="User" />
                 
                 <div className="User-Info-Text-Collumn">
-                    <span className="User-Name">{userData.username}</span>
+                    <span className="User-Name">{userData.first_name} {userData.last_name}</span>
                     <span className="User-Email">{userData.email}</span>
 
                 </div>

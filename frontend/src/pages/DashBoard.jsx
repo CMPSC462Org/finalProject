@@ -1,30 +1,52 @@
-import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { data, Outlet, useNavigate } from 'react-router-dom';
 import '../styles/main.scss';
 import '../styles/dashBoard.scss';
 import JobCard from '../components/JobCard';
 import JobList from '../components/JobList';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
+import { getCurrentUser } from '../services/auth';
+
 
 
 
 
 const DashBoard = () => {
 
-  const mockUserData = {
-    _id: "661edaba6c9ea05d94cb52d5",
-    first_name: "John",
-    last_name: "Doe",
-    username: "johndoe123",
-    email: "JohnDoe@gmail.com",
-    profile_picture: "https://yourbucket.com/default-profile.png"
-  };
+  const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    // First check local storage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUserData(JSON.parse(storedUser))
+    }
+
+    // check with the get me route to verifiy it is the user 
+    getCurrentUser()
+    .then((data) => {
+      setUserData(data.user)
+      localStorage.setItem('user', JSON.stringify(data.user))
+    })
+    .catch((error) => {
+      console.log("Session expired or user invalid logging out...: ", error);
+      localStorage.removeItem('user');
+      navigate('login');
+    })
+  }, [navigate]);
+
+  if (!userData) {
+    return <div className="loader"></div>;
+  }
+
 
   return (
     <div className="Main-Dashboard-Container">
       <Sidebar 
-      userData={mockUserData}
+      userData={userData}
       />
       <div className="Dashboard-Container-Collumn">
           <Navbar />
@@ -36,7 +58,7 @@ const DashBoard = () => {
 
           {/* To pass the user data to the profile componenet*/}
           <Outlet 
-           context={{userData: mockUserData}}
+           context={{userData}}
           />
           
       </div>      

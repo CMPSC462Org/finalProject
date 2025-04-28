@@ -78,6 +78,7 @@ def sign_up():
                     "username": new_user.username,
                     "email": new_user.email,
                     "profile_picture": new_user.profile_picture,
+                    "created-at": new_user.created_at.isoformat()
                 }
             }
             
@@ -131,6 +132,8 @@ def login():
                 "username": found_user.username,
                 "email": found_user.email,
                 "profile_picture": found_user.profile_picture,
+                "created_at": found_user.created_at.isoformat()
+
             }
         }
 
@@ -165,6 +168,7 @@ def getMe(current_user):
             "username": current_user.username,
             "email": current_user.email,
             "profile_picture": current_user.profile_picture,
+            "created_at": current_user.created_at.isoformat()
         }
         return jsonify({"user": user_data}), 200
     except Exception as e:
