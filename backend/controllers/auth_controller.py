@@ -105,11 +105,16 @@ def login():
             data = request.get_json()
         else:
             data = request.form
+        
+        email_regex = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 
-        username = data.get("username")
+        email = data.get("email")
         password = data.get("password")
 
-        found_user = User.objects(username=username).first()
+        if email_regex.match(email) is None:
+            return jsonify({"error": "Invalid email format"}), 400
+
+        found_user = User.objects(email=email).first()
 
         if not found_user:
             return jsonify({"error": "User not found"}), 404

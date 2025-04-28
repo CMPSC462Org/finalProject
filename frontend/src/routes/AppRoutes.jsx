@@ -16,19 +16,20 @@ const AppRoutes = () => {
     <Routes>
 
       {/* Default route*/}
+      {/* <Route path="/" element={<Login />} /> */}
+
       <Route path="/" element={<DashBoard />}>
         <Route index element={<JobList />} />
-      
+        <Route path="add-job" element={<JobForm />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
 
       <Route path="/dashboard" element={<DashBoard />}>
-      
         <Route index element={<JobList />} />
-
         <Route path="add-job" element={<JobForm />} />
         <Route path="profile" element={<Profile />} />
-        
       </Route>
+      
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
     </Routes>
