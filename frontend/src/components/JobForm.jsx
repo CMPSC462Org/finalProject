@@ -87,6 +87,7 @@ const JobForm = () => {
               <option value="interviewed">Interviwed</option>
               <option value="offered">Offered</option>
               <option value="rejected">Rejected</option>
+              <option value="awaiting">Awaiting</option>
           </select>
             <FiChevronDown className="Select-Arrow-Icon" />
           </div>
@@ -101,6 +102,14 @@ const JobForm = () => {
         value={dateApplied}
         onChange={(e) => setDateApplied(e.target.value)}
 
+        />
+
+        <input
+          type="url"
+          className="Job-Form-Input"
+          placeholder="Job Link (Optional)"
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
         />
 
         

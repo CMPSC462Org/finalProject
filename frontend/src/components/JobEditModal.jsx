@@ -13,6 +13,7 @@ const JobEditModal = ({ JobToEdit, onClose, onUpdate }) => {
     const [company, setCompany] = useState('');
     const [status, setStatus] = useState('');
     const [date, setDate] = useState('');
+    const [link, setLink] = useState('');
     const [notes, setNotes] = useState('');
 
 
@@ -23,6 +24,7 @@ const JobEditModal = ({ JobToEdit, onClose, onUpdate }) => {
                 setCompany(response.job.company_name);
                 setStatus(response.job.status);
                 setDate(response.job.application_date.slice(0, 10));
+                setLink(response.job.link);
                 setNotes(response.job.comments && response.job.comments.length > 0 ? response.job.comments[0] : '');
         } catch (error) {
             console.error("Error fetching job data: ", error)
@@ -45,6 +47,7 @@ const JobEditModal = ({ JobToEdit, onClose, onUpdate }) => {
                     company_name: company,
                     status,
                     application_date: date,
+                    link: link,
                     comments: [notes]
                 };
 
@@ -115,6 +118,17 @@ const JobEditModal = ({ JobToEdit, onClose, onUpdate }) => {
                         onChange={(e) => setDate(e.target.value)}
                         
                         />
+
+
+                        
+                        <input
+                        type="url"
+                        className="Job-Form-Input"
+                        placeholder="Job Link (Optional)"
+                        value={link}
+                        onChange={(e) => setLink(e.target.value)}
+                        />
+                       
                 
                         
                         <textarea 
@@ -124,6 +138,8 @@ const JobEditModal = ({ JobToEdit, onClose, onUpdate }) => {
                         onChange={(e) => setNotes(e.target.value)}
                         
                         />
+
+
                 
                 
                         <div className="Job-Form-Button-Row">

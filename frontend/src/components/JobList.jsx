@@ -12,7 +12,7 @@ const JobList = () => {
   const [jobs, setJobs ] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const statuses = ["applied", "interviewed", "offered", "rejected"];
+  const statuses = ["applied", "interviewed", "offered", "rejected", "awaiting"];
   const [selectedJob, setSelectedJob] = useState(null);
   // Mimic the data from the backend
 

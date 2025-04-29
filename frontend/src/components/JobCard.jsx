@@ -45,7 +45,27 @@ const JobCard = ({ job, onDelete, onEdit }) => {
       
       <div className="JobCard-Divider"/>
       {job.comments && <p className="JobCard-Notes">"{job.comments[0]}"</p>}
+
+
+
+
+
+      {job.link && (
+      <button
+        className="JobCard-Link-Button"
+        onClick={(e) => {
+          e.stopPropagation(); 
+          window.open(job.link, '_blank', 'noopener,noreferrer');
+        }}
+      >
+        View Job Posting
+      </button>
+    )}
       </div>
+
+
+            
+
   )
 }
 
