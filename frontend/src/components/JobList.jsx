@@ -10,6 +10,7 @@ const JobList = () => {
 
 
   const [jobs, setJobs ] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const statuses = ["applied", "interviewed", "offered", "rejected"];
   const [selectedJob, setSelectedJob] = useState(null);
@@ -23,6 +24,8 @@ const JobList = () => {
 
     } catch (error) {
       console.error('Error fetching jobs:', error);
+    } finally {
+      setLoading(false);
     }
 
   };
@@ -52,7 +55,17 @@ const JobList = () => {
   return (
     <div className="Main-JobCollumn-List-Container">
       
-      { jobs.length === 0 ? (
+      { loading ? (
+        <div className="Loading-Message">
+          <div className="spinner">
+
+          </div>
+          
+        </div>
+      ) :
+      
+      
+      jobs.length === 0 ? (
         <div className="Empty-Jobs-Message">
           <h2 className="No-Jobs-Title">No Job Entries yet! 🚀</h2>
           <p>Click "<strong>Add Job</strong>" to create your first job entry!</p>

@@ -11,12 +11,12 @@ const Navbar = () => {
         <ul className= "Navbar-tabs">
           <li className="Navbar-tab active">
           <FaTh className="tab-icon"/>
-            <span>Board</span>
+            <span>Board (Coming Soon)</span>
             </li>
 
           <li className="Navbar-tab">
             <FaListUl  className="tab-icon"/>
-            <span>List</span>
+            <span>List(Coming Soon)</span>
             </li>
         </ul>
       </div>
@@ -26,7 +26,7 @@ const Navbar = () => {
         <div className="Nav-Search-Bar">
             <input type="text" 
             className="Navbar-Search-Input"
-            placeholder="Search for jobs"
+            placeholder="Search for jobs (Coming Soon)"
             />
             <FaSearch className="Sidebar-Icon" />
             
