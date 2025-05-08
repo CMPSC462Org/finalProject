@@ -57,7 +57,9 @@ def create_job(current_user):
             "link": new_job.link
         }
 
-        return jsonify({"message": "Job created successfully", "job": job_data}), 201
+        return jsonify({
+            "message": "Job created successfully", 
+                        "job": job_data}), 201
 
     except ValidationError as e:
         return jsonify({"error": str(e)}), 400

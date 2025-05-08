@@ -74,7 +74,8 @@ const JobList = () => {
       ) : (
       
       statuses
-      .filter((status) => jobs.some((job) => job.status === status)) 
+      .filter((status) => jobs.some((job) => 
+        job.status === status)) 
       .map((status) => (
         <JobColumn 
           key={status} 
@@ -82,13 +83,8 @@ const JobList = () => {
           jobs={jobs.filter(job => job.status === status)} 
           onEdit={setSelectedJob}
           onDelete={handleDelete}
-          
-          
           />
-      ))
-
-       
-      )}
+      )))}
 
     {selectedJob && 
     <JobEditModal 

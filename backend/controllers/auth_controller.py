@@ -174,6 +174,15 @@ def getMe(current_user):
     except Exception as e:
         print(f"Error in the Get me controller: {str(e)}")
         return jsonify({"Error": f"Error in get me controller: {str(e)}"}), 500
+    
+
+
+def google_sign_up():
+    pass
+
+
+def google_login():
+    pass
 
 
 
