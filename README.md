@@ -39,7 +39,12 @@ cd backend
 
 **2.** Set up the python Environment and Interpretor
 
-2a. Activate the Virtual Environment (If Docker didn't do it already)
+2a. Create the venv enviornment folder
+```
+python -m venv venv
+```
+
+2b. Activate the Virtual Environment (If Docker didn't do it already)
 
 **Windows**
 ```
@@ -50,7 +55,7 @@ env\Scripts\activate
 ```
 source venv/bin/activate
 ```
-2b. Select Interpretor
+2c. Select Interpretor
 
 * CRTL+shift+p (Opens Intepretor)
 
@@ -66,9 +71,12 @@ source venv/bin/activate
 ```
 C:\Users\<<USERNAME>>\path\to\finalProject\backend\venv\Scripts\python.exe
 ```
+3. Install all the libraries in the **requirements.txt** file
+```
+pip install -r requirements.txt
+```
 
-
-**3.** Run the Flask Server
+**4.** Run the Flask Server
 ```
 python run.py
 ```
