@@ -1,15 +1,71 @@
 import {React, useEffect, useState} from 'react'
 import axios from 'axios';
 import '../styles/main.scss';
+import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../services/auth';
+import { Link } from 'react-router-dom';
+import { MdOutlineUploadFile } from "react-icons/md";
+
 
 const Register = () => {
 
+  
+  const navigate = useNavigate();
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('')
   const [username, setUsername] = useState('');
   const [email,setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [profilePicture, setProfilePicture] = useState('');
+
+
+  // Convert file to string for backend
+  const handleProfilePicture = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePicture(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  const handleRegister = async (e) => {
+      e.preventDefault();
+
+      if (password != confirmPassword) {
+        alert("Passwords must be the same");
+        return
+      }
+
+    
+      try {
+        const data = await registerUser({
+          first_name: firstname,
+          last_name: lastname,
+          username: username,
+          email: email,
+          password: password,
+          profile_picture: profilePicture || "",
+          
+        });
+        if (!data) {
+          console.log("Failed to Register User:", data)
+        } else {
+          console.log("Registration successful", data)
+        }
+
+        localStorage.setItem('user', JSON.stringify(data.user));
+      
+        // Redirect the user to the dashboard
+        navigate('/dashboard');
+      } catch(error) {
+        console.log("Error registering user: ", error)
+      }
+  };
 
   return (
     <div className="Main-container-Register">
@@ -29,7 +85,7 @@ const Register = () => {
       <div className="Register-Form-Container">
 
         <h1 className="Register-Form-Title"><span className="Register-Form-Title-Span">JobFlow</span></h1>
-        <form className="Register-Form">
+        <form className="Register-Form" onSubmit={handleRegister}>
 
         
         <div className="Form-Sign-Up-Title-Container">
@@ -40,7 +96,7 @@ const Register = () => {
 
           <div className="First-Last-Name-Container-row">
             <input type="text" placeholder="First Name" className="Register-Form-Input" value ={firstname} onChange={(e) => setFirstName(e.target.value)}/>
-            <input type="email" placeholder="Last Name" className="Register-Form-Input" value={lastname}onChange={(e) => setLastName(e.target.value)}/>
+            <input type="text" placeholder="Last Name" className="Register-Form-Input" value={lastname}onChange={(e) => setLastName(e.target.value)}/>
           </div>
           
           <div className="User-Email-Container-row">
@@ -53,8 +109,30 @@ const Register = () => {
             <input type="password" placeholder="Confirm Password" className="Register-Form-Input" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
           </div>
 
+          <div className = "profile-pricture-upload-row">
+              <span>Upload Profile Picture:  </span>
+
+             
+              <label htmlFor="profilePicture">
+                <MdOutlineUploadFile className={`upload-icon ${profilePicture ? 'file-selected' : ''}`}/>
+
+              </label>
+              
+
+              <input
+              type="file"
+              id="profilePicture"
+              accept="image/*"
+              style={{display: 'none'}}
+              onChange={handleProfilePicture}
+            />
+
+          </div>
+
           <button className="Register-Form-Button" type='submit'>Create account</button>
-          <span className="Register-Form-Text">Already have an account? <a href="/login" className="Register-Form-Link">Login</a></span>
+
+          
+          <span className="Register-Form-Text">Already have an account? <Link to="/login" className="Register-Form-Link">Login</Link></span>
           
           <div className="Divider-With-Text">
             <span>Or Sign up with</span>
