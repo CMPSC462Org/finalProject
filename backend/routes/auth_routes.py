@@ -12,3 +12,7 @@ auth_routes.route("/signup", methods=["POST"])(auth_controller.sign_up)
 auth_routes.route("/login", methods=["POST"])(auth_controller.login)
 auth_routes.route("/logout", methods=["POST"])(auth_controller.logout)
 auth_routes.route("/me",  methods=["GET"])(protected_route(auth_controller.getMe))
+
+
+auth_routes.route("/google/login", methods=["GET"])(auth_controller.google_login)
+auth_routes.route("/google/callback",methods=["GET"])(auth_controller.google_callback)

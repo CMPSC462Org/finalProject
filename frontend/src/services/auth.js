@@ -20,3 +20,8 @@ export const getCurrentUser = async () => {
     const response = await api.get('/auth/me');
     return response.data;
 };
+
+export const googleLogin = async () => {
+    const response = await api.get('/auth/google/login');
+    return response.data;
+}

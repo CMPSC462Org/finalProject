@@ -17,7 +17,7 @@ from datetime import datetime, timezone, timedelta
 
 load_dotenv()
 
-def generate_token_and_set_cookie(user_id, res_data):
+def generate_token_and_set_cookie(user_id, res_data, is_oauth=False):
     try:
         secret_key = os.getenv("JWT_SECRET_KEY")
         print(f"Secret key retrieved: {secret_key is not None}")  # Check if key exists
@@ -38,13 +38,18 @@ def generate_token_and_set_cookie(user_id, res_data):
         )
 
         response = make_response(jsonify(res_data), 201)
+
+        samesite_setting = "Lax" if is_oauth else "Strict"
+
+
         response.set_cookie(
             "token",
             token,
             httponly=True,
             secure=(os.getenv("FLASK_ENV") != "development"),  
-            samesite="Strict",  
-            max_age= 30 * 24 *60 * 60  # 30 days in seconds
+            samesite=samesite_setting,  
+            max_age= 30 * 24 *60 * 60,  # 30 days in seconds
+            domain="localhost"
         )
         return response
     

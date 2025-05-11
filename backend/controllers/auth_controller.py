@@ -1,9 +1,11 @@
-from flask import request, jsonify, Response, make_response
+from flask import request, jsonify, Response, make_response, redirect, session
 from utils.bcrypt_instance import bcrypt
 from models.User import User
 from app import bcrypt
 import os
 import re
+from dotenv import load_dotenv
+from middleware.create_unique_username import generate_unique_username
 
 # MongoDB imports
 import mongoengine
@@ -11,8 +13,34 @@ from mongoengine.errors import NotUniqueError, ValidationError
 from mongoengine import Document, StringField, EmailField, DateTimeField
 from datetime import datetime, timezone
 from middleware.generateTokenandcookie import generate_token_and_set_cookie
+#google Auth
+from requests_oauthlib import OAuth2Session
+
+
+
+load_dotenv()
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 #Auth controller
+
+
+# Google Auth
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")
+
+GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/auth"
+GOOGLE_TOKEN_URL = "https://accounts.google.com/o/oauth2/token"
+GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
+
+SCOPES = [
+    "openid",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile",
+]
+
+
+
 def sign_up():
 
     try:
@@ -50,6 +78,9 @@ def sign_up():
             return jsonify({"error": "Email already exists"}), 400
         
 
+        if not password:
+            return jsonify({"error":"Password is required for local sign-up"}), 400
+
         #Makes sure the password is 
         if len(password) < 6:
             return jsonify({"error": "Password must be at least 6 characters long"}), 400
@@ -64,6 +95,7 @@ def sign_up():
                 email=email,
                 password=hashed_pw,
                 profile_picture=profile_picture,
+                auth_provider="local"
             )
         except NotUniqueError as nu:
             return jsonify({"error": "Username or email already exists"}), 400
@@ -115,10 +147,13 @@ def login():
         if email_regex.match(email) is None:
             return jsonify({"error": "Invalid email format"}), 400
 
-        found_user = User.objects(email=email).first()
+        found_user = User.objects(email=email,auth_provider="local").first()
 
         if not found_user:
-            return jsonify({"error": "User not found"}), 404
+            return jsonify({"error": "User not found or not registered using email/password"}), 404
+        
+        if not password:
+            return jsonify({"error":"Password is required fro local sign-up"})
         
         if not bcrypt.check_password_hash(found_user.password, password):
             return jsonify({"error": "Invalid password"}), 400
@@ -177,15 +212,128 @@ def getMe(current_user):
     
 
 
-def google_sign_up():
-    pass
+def google_callback():
+    try:
+        google = OAuth2Session(
+            GOOGLE_CLIENT_ID,
+            redirect_uri=GOOGLE_REDIRECT_URI,
+            state=session.get('oauth_state'),
+            scope=SCOPES
+        )
+
+        token = google.fetch_token(GOOGLE_TOKEN_URL,
+                                   client_secret=GOOGLE_CLIENT_SECRET,
+                                     authorization_response=request.url)
+        user_info = google.get(GOOGLE_USER_INFO_URL).json()
+
+        email = user_info.get("email")
+        first_name = user_info.get("given_name", "")
+        last_name = user_info.get("family_name", "")
+        profile_picture = user_info.get("picture", "")
+        
+
+        existing_user = User.objects(email=email).first()
+
+
+        # Determine Action
+        action = session.get("action", "login")
+
+        # if action == "login" and not existing_user:
+        #     return jsonify({"error": "User not found for google login. Please sign up first using google."}), 404
+
+        # If action is "register" and user already exists, reject the registration
+        # if action == "register" and existing_user:
+        #     return jsonify({"error": f"User already exists with email {email}. Please log in instead."}), 400
+        
+
+        
+
+        if not existing_user:
+            try:
+                # generate a unique username for new users
+
+                username = generate_unique_username(email)
+
+                #Build the repsosne data to be passed to the token function
+                new_user = User.objects.create(
+                    first_name=first_name,
+                    last_name=last_name,
+                    username=username,
+                    email=email,
+                    profile_picture=profile_picture,
+                    auth_provider="google",
+                    password=None  
+                )
+                new_user.save()
+                user = new_user
+                message = "Sign Up successful via Google"
+            
+            except NotUniqueError as nu:
+                return jsonify({"error": "Username or email already exists"}), 400
+        else:
+            user = existing_user
+            username = user.username
+            message = "Login successful via Google"
+            
+        #Make Repsosne the res user data and send it to genrate a token
+        
+
+        res_data = {
+            "message": message,
+            "user": {
+                "_id": str(user.id),
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "username": username,
+                "email": user.email,
+                "profile_picture": user.profile_picture,
+                "created_at": user.created_at.isoformat(),
+            },
+            #INclude the token fro furture use (google drive,calender, etc)
+            "token" :token
+        }
+
+        #get the data from the token and redirect it to the frontend url
+        repsonse_data = generate_token_and_set_cookie(user.id, res_data, is_oauth=True)
+        
+        token = repsonse_data.headers.get("Set-Cookie")
+         # Determine the redirect URL based on the action
+        
+        repsonse_data.headers["Location"] = "http://localhost:5173/dashboard"
+        repsonse_data.status_code = 302
+
+        return repsonse_data
+
+    except Exception as e:
+        print(f"Error in Google callback: {str(e)}")
+        return jsonify({"Error": f"Error with google call back sign-up controller: {str(e)}"}), 500
 
 
 def google_login():
+    try:
+        action = request.args.get("action", "login")
+        session['action'] = action
+
+        google = OAuth2Session(GOOGLE_CLIENT_ID, redirect_uri=GOOGLE_REDIRECT_URI, scope=SCOPES)
+        auth_url, state = google.authorization_url(GOOGLE_AUTH_URL, access_type="offline")
+        session['oauth_state'] = state
+        #For debugging purposes
+        # Include action parameter in the redirect URL
+        
+
+        print(f"OAuth_URI: {GOOGLE_REDIRECT_URI}")
+        
+        return redirect(auth_url)
+    except Exception as e:
+        print(f"Error in Google callback login: {str(e)}")
+        return jsonify({"Error": f"Error with google callback login controller: {str(e)}"}), 500
+
+
+
+
+def linkedin_callback():
     pass
 
-
-
-
-
+def linkedin_login():
+    pass
 

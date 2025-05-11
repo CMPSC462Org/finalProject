@@ -6,6 +6,8 @@ import '../styles/main.scss';
 import Register from './Register';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { googleLogin } from '../services/auth';
+import { getCurrentUser } from '../services/auth';
 
 const Login = () => {
 
@@ -36,6 +38,28 @@ const Login = () => {
       }
     
    }
+
+    
+   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+  
+    if (token) {
+      localStorage.setItem('userToken', token);
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
+
+   const handleGoogleLogin = async (e) => {
+    e.preventDefault();
+  
+    try {
+      window.location.href = "http://localhost:5000/api/auth/google/login";
+    } catch (error) {
+      console.log("Error initiating Google login: ", error);
+    }
+  };
 
 
     
@@ -117,7 +141,7 @@ const Login = () => {
             <div className="Social-Media-Container-row">
   
               <button className="Social-Media-Wrapper">
-                <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" className="Social-Media-Icon" />
+                <img src="https://img.icons8.com/color/48/000000/google-logo.png" onClick={handleGoogleLogin} alt="Google" className="Social-Media-Icon" />
               </button>
   
               <button className="Social-Media-Wrapper">

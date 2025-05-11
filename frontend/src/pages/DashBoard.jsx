@@ -34,7 +34,7 @@ const DashBoard = () => {
     .catch((error) => {
       console.log("Session expired or user invalid logging out...: ", error);
       localStorage.removeItem('user');
-      navigate('login');
+      navigate('/login');
     })
   }, [navigate]);
 

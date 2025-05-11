@@ -15,8 +15,9 @@ class User(Document):
     last_name = StringField(required=True)
     username = StringField(required=True, unique=True)
     email = EmailField(required=True, unique=True)
-    password = StringField(required=True, min_length=6)
+    password = StringField(required=False, min_length=6) # Not required for OAuth users
     profile_picture = StringField(default="",required=False)
+    auth_provider = StringField(required=True, choices=["local","google"])
 
 
     # Time Stamps

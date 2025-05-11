@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../services/auth';
 import { Link } from 'react-router-dom';
 import { MdOutlineUploadFile } from "react-icons/md";
+import { googleLogin } from '../services/auth';
+import { getCurrentUser } from '../services/auth';
 
 
 const Register = () => {
@@ -66,6 +68,33 @@ const Register = () => {
         console.log("Error registering user: ", error)
       }
   };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+  
+    if (token) {
+      localStorage.setItem('userToken', token);
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
+
+
+
+
+  const handleGoogleRegister = async (e) => {
+    e.preventDefault();
+  
+    try {
+      window.location.href = "http://localhost:5000/api/auth/google/login";
+    } catch (error) {
+      console.log("Error initiating Google login: ", error);
+    }
+  };
+
+
+
 
   return (
     <div className="Main-container-Register">
@@ -141,7 +170,7 @@ const Register = () => {
           <div className="Social-Media-Container-row">
 
             <button className="Social-Media-Wrapper">
-              <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" className="Social-Media-Icon" />
+              <img src="https://img.icons8.com/color/48/000000/google-logo.png" onClick={handleGoogleRegister} alt="Google" className="Social-Media-Icon" />
             </button>
 
             <button className="Social-Media-Wrapper">

@@ -19,6 +19,7 @@ def create_app():
     app = Flask(__name__)
     load_dotenv()
     bcrypt.init_app(app)
+    app.secret_key = os.getenv("SECRET_KEY")
     CORS(app, supports_credentials=True)
 
     app.mongo_db = connect_mongodb()
