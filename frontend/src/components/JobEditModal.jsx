@@ -103,6 +103,7 @@ const JobEditModal = ({ JobToEdit, onClose, onUpdate }) => {
                             <option value="interviewed">Interviwed</option>
                             <option value="offered">Offered</option>
                             <option value="rejected">Rejected</option>
+                            <option value="awaiting">Awaiting</option>
                         </select>
                             <FiChevronDown className="Select-Arrow-Icon" />
                         </div>

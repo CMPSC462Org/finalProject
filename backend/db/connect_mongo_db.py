@@ -12,7 +12,7 @@ load_dotenv()
 
 def connect_mongodb():
     try:
-        mongo_uri = os.getenv("MONGODB_URL")
+        mongo_uri = os.getenv("MONGODB_URI")
         db = connect(
             host=mongo_uri,
             alias="default",
