@@ -1,7 +1,7 @@
 import {React, useEffect, useState} from 'react'
 import axios from 'axios';
 import '../styles/main.scss';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { registerUser } from '../services/auth';
 import { Link } from 'react-router-dom';
 import { MdOutlineUploadFile } from "react-icons/md";
@@ -20,7 +20,8 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
-
+  const [searchParams] = useSearchParams();
+  const errorKey = searchParams.get("error");
 
   // Convert file to string for backend
   const handleProfilePicture = (e) => {
@@ -65,19 +66,43 @@ const Register = () => {
         // Redirect the user to the dashboard
         navigate('/dashboard');
       } catch(error) {
-        console.log("Error registering user: ", error)
+        console.log("Error registering user: ", error);
+
+        if (error.response && error.response.data && error.response.data.error) {
+          console.log("Error response from backend:", error.response.data.error);
+          alert(error.response.data.error);
+        } else {
+          console.log("General error:", error);
+          alert("Something went wrong. Please try again.");
+        }
       }
   };
+
+  const errorMessages = {
+    email_exist_local: "This email is already registered using email/password. Please sign in using your password.",
+    email_google_registered: "This email is already registered using Google. Please login via Google."  
+   };
+  
+  
+
+  
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
+
   
+        if (errorKey && errorMessages[errorKey]) {
+          alert(errorMessages[errorKey]);
+        }
+        
+
     if (token) {
       localStorage.setItem('userToken', token);
       navigate('/dashboard');
     }
-  }, [navigate]);
+
+  }, [errorKey, navigate]);
 
 
 
@@ -90,6 +115,13 @@ const Register = () => {
       window.location.href = "http://localhost:5000/api/auth/google/login";
     } catch (error) {
       console.log("Error initiating Google login: ", error);
+
+      // Failed to login because email exist through google login
+      if (error.response && error.response.data && error.response.data.error) {
+        alert(error.response.data.error);
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -169,11 +201,11 @@ const Register = () => {
 
           <div className="Social-Media-Container-row">
 
-            <button className="Social-Media-Wrapper">
+            <button className="Social-Media-Wrapper" type="button">
               <img src="https://img.icons8.com/color/48/000000/google-logo.png" onClick={handleGoogleRegister} alt="Google" className="Social-Media-Icon" />
             </button>
 
-            <button className="Social-Media-Wrapper">
+            <button className="Social-Media-Wrapper" type="button">
             <img src="https://img.icons8.com/color/48/000000/linkedin.png" alt="LinkedIn" className="Social-Media-Icon" />
             </button>
             

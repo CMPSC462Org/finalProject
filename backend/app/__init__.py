@@ -20,7 +20,7 @@ def create_app():
     load_dotenv()
     bcrypt.init_app(app)
     app.secret_key = os.getenv("SECRET_KEY")
-    CORS(app, supports_credentials=True)
+    CORS(app, supports_credentials=True , resources={r"/*": {"origins": ["http://localhost:5173"]}})
 
     app.mongo_db = connect_mongodb()
     app.register_blueprint(auth_routes, url_prefix="/api/auth")

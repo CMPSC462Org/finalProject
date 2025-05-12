@@ -71,7 +71,13 @@ def sign_up():
         if User.objects(username=username).first():
             return jsonify({"error": "Username already exists"}), 400
         
-
+        #Check if the email already eixit 
+        existing_user = User.objects(email=email).first()
+        
+        if existing_user and existing_user.auth_provider == "google":
+            # Redirect to register with error parameter
+            return jsonify({"error": "Email already exist via google, please login via Google"}), 400
+           
         #Cheks if the email already exists in the database
        
         if User.objects(email=email).first():
@@ -146,6 +152,14 @@ def login():
 
         if email_regex.match(email) is None:
             return jsonify({"error": "Invalid email format"}), 400
+        
+        existing_user = User.objects(email=email).first()
+        
+        if existing_user and existing_user.auth_provider == "google":
+            # Redirect to login with error parameter
+            return jsonify({"error": "Email already exist via google, please login via Google"}) ,400
+            
+
 
         found_user = User.objects(email=email,auth_provider="local").first()
 
@@ -153,7 +167,7 @@ def login():
             return jsonify({"error": "User not found or not registered using email/password"}), 404
         
         if not password:
-            return jsonify({"error":"Password is required fro local sign-up"})
+            return jsonify({"error":"Password is required for local sign-up"}), 400
         
         if not bcrypt.check_password_hash(found_user.password, password):
             return jsonify({"error": "Invalid password"}), 400
@@ -246,9 +260,18 @@ def google_callback():
         #     return jsonify({"error": f"User already exists with email {email}. Please log in instead."}), 400
         
 
-        
+        if existing_user and existing_user.auth_provider == "local":
+            return redirect(f"http://localhost:5173/login?error=email_exist_local")
+            # return jsonify({"error": "This email is already registered using email/password please sign in using your password"}), 400
 
-        if not existing_user:
+        
+        if existing_user and existing_user.auth_provider == "google":
+            user = existing_user
+            username = user.username
+            message = "Login successful via Google"
+
+        else:
+
             try:
                 # generate a unique username for new users
 
@@ -270,10 +293,6 @@ def google_callback():
             
             except NotUniqueError as nu:
                 return jsonify({"error": "Username or email already exists"}), 400
-        else:
-            user = existing_user
-            username = user.username
-            message = "Login successful via Google"
             
         #Make Repsosne the res user data and send it to genrate a token
         

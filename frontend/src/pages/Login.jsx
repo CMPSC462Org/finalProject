@@ -4,7 +4,7 @@ import api from '../services/api';
 import { loginUser } from '../services/auth';
 import '../styles/main.scss';
 import Register from './Register';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { googleLogin } from '../services/auth';
 import { getCurrentUser } from '../services/auth';
@@ -14,6 +14,8 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [searchParams] = useSearchParams();
+  const errorKey = searchParams.get("error");
 
    const handleLogin = async (e) => {
       e.preventDefault();
@@ -34,21 +36,37 @@ const Login = () => {
 
 
       } catch(error) {
-        console.log('Login failed:', error)
+        console.log('Login failed:', error);
+
+        if (error.response && error.response.data && error.response.data.error) {
+          console.log("Error response from backend:", error.response.data.error);
+          alert(error.response.data.error);
+        } else {
+          console.log("General error:", error);
+          alert("Something went wrong. Please try again.");
+        }
       }
     
    }
 
+   const errorMessages = {
+    email_exist_local: "This email is already registered using email/password. Please sign in using your password.",
+    email_google_registered: "This email is already registered using Google. Please login via Google."
+   };
     
    useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
+
+    if (errorKey && errorMessages[errorKey]) {
+          alert(errorMessages[errorKey]);
+        }
   
     if (token) {
       localStorage.setItem('userToken', token);
       navigate('/dashboard');
     }
-  }, [navigate]);
+  }, [navigate, errorKey]);
 
 
    const handleGoogleLogin = async (e) => {
@@ -58,6 +76,12 @@ const Login = () => {
       window.location.href = "http://localhost:5000/api/auth/google/login";
     } catch (error) {
       console.log("Error initiating Google login: ", error);
+
+      if (error.response && error.response.data && error.response.data.error) {
+        alert(error.response.data.error);
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
     }
   };
 
@@ -140,11 +164,11 @@ const Login = () => {
   
             <div className="Social-Media-Container-row">
   
-              <button className="Social-Media-Wrapper">
+              <button className="Social-Media-Wrapper" type="button">
                 <img src="https://img.icons8.com/color/48/000000/google-logo.png" onClick={handleGoogleLogin} alt="Google" className="Social-Media-Icon" />
               </button>
   
-              <button className="Social-Media-Wrapper">
+              <button className="Social-Media-Wrapper" type="button">
               <img src="https://img.icons8.com/color/48/000000/linkedin.png" alt="LinkedIn" className="Social-Media-Icon" />
               </button>
               
